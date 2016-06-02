@@ -41,7 +41,10 @@ echo '5 3  * *  * root /usr/local/bin/certbot/certbot-auto renew --standalone --
 # KEY_PATH="/etc/ssl/my_key.pem"
 # CERT_PATH="/etc/ssl/my_cert.pem"
 
-
+# Install Python & Anaconda
+./install_python3.sh
+# Install Jupyterhub
+./install_jupyterhub.sh
 
 
 
