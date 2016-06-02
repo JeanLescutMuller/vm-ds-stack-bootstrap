@@ -1,3 +1,5 @@
+
+        # Jupyterhub reverse proxy
         location /jupyterhub/ {
                 proxy_pass https://localhost:8000;
 
