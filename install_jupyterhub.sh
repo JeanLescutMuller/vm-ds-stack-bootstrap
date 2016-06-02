@@ -33,3 +33,8 @@ sed -i "/c.JupyterHub.ip/s/.*/c.JupyterHub.ip = '127.0.0.1'/" /etc/jupyterhub/ju
 
 sudo update-rc.d jupyterhub defaults
 sudo service jupyterhub restart
+
+# ------------------------------
+# Adding the Nginx reverse proxy for jupyterhub
+# ------------------------------
+sed -i '/ssl_certificate_key/r jupyterhub_nginx_reverse_proxy' /etc/nginx/sites-available/default
