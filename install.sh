@@ -41,4 +41,7 @@ scripts/4_install_python3.sh
 # Install Jupyterhub
 scripts/5_install_jupyterhub.sh
 
-
+# Install Codiad for C++/Java developments
+scripts/6_install_codiad.sh 
+# Install ShellInABox for remote ssh access
+scripts/7_install_shellinabox
