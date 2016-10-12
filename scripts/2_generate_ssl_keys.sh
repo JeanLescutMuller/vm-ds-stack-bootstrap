@@ -3,7 +3,7 @@
 ##############
 # OPTION 1 : Letsencrypt certificate
 ##############
-git clone https://github.com/certbot/certbot /usr/local/bin
+git clone https://github.com/certbot/certbot /usr/local/bin/certbot
 /usr/local/bin/certbot/certbot-auto certonly -d $FQDN -m $EMAIL --standalone --agree-tos
 KEY_PATH="/etc/letsencrypt/live/$FQDN/privkey.pem"
 CERT_PATH="/etc/letsencrypt/live/$FQDN/fullchain.pem"
