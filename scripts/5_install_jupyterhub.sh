@@ -9,6 +9,8 @@ sudo apt-get install npm nodejs-legacy
 sudo npm install -g configurable-http-proxy
 sudo apt-get install python3-pip
 pip3 install jupyterhub
+# If  'No module named 'packaging' error, check if 'pip3 --version' doesn't work, and fix it with :
+# https://discourse.mailinabox.email/t/unable-to-run-mailinabox-command/1840/12
 pip3 install --upgrade notebook
 
 
@@ -23,7 +25,7 @@ cp ./root/etc/jupyterhub/jupyterhub_config.py /etc/jupyterhub/
 # ------------------------------
 # Creating the daemon service
 # ------------------------------
-cp ./root/etc/systemd/system/jupyterhub.service /etc/systemd/systemd/
+cp ./root/etc/systemd/system/jupyterhub.service /etc/systemd/system/
 sudo service jupyterhub start
 
 
