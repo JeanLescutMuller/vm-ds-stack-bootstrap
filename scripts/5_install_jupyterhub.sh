@@ -27,5 +27,8 @@ cp ./root/etc/jupyterhub/jupyterhub_config.py /etc/jupyterhub/
 # ------------------------------
 cp ./root/etc/systemd/system/jupyterhub.service /etc/systemd/system/
 sudo service jupyterhub start
+# or : sudo systemctl start jupyterhub.service
+sudo systemctl enable jupyterhub.service
+
 
 
