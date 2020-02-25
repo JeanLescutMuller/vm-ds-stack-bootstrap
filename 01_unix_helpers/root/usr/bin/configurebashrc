@@ -1,0 +1,22 @@
+#!/bin/bash -xe
+
+# Color of user@hostname in the PS of the terminal
+if [ $(whoami) = "root" ]; then
+   PS_color=31 # "31" for red (root color)
+else
+   PS_color=36 # By default : "36" for cyan.
+fi
+
+# Adding color to the bash shell :
+# echo 'Configurebashrc: Adding PS1 colors ...'
+#echo 'export PS1="\[\033[03;'$PS_color'm\]\u@\h:\[\033[03;34m\]\w\$\[\033[00m\] "' >> ~/.bashrc
+echo 'export PS1="\[\033[03;'$PS_color'm\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]$ "' >> ~/.bashrc
+
+# Improve logging of bash command :
+# Note : we append to .bashrc instead of .bash_profile (the regular way) because we wanna activate this config even for non-login shells
+# echo 'Configurebashrc: Adding History options...'
+echo 'export HISTCONTROL=ignoredups:erasedups' >> ~/.bashrc
+echo 'export HISTSIZE=100000' >> ~/.bashrc
+echo 'export HISTFILESIZE=100000' >> ~/.bashrc
+echo 'shopt -s histappend' >> ~/.bashrc
+echo 'export HISTTIMEFORMAT="%Y-%m-%d %T "' >> ~/.bashrc

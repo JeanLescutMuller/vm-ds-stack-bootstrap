@@ -1,0 +1,10 @@
+[Unit]
+Description=Jupyterhub
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/opt/anaconda3/bin/jupyterhub -f /etc/jupyterhub/jupyterhub_config.py
+
+[Install]
+WantedBy=multi-user.target
