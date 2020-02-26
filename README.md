@@ -1,6 +1,6 @@
 # Data Science stack server
-This set of "bootstrap" scripts are designed to automatically install on a raw server the necessary stack (set of services) necessary for a Data Scientist to work (or at least me)
-All the IDE are cloud-based and are :
+This set of "bootstrap" scripts are designed to automatically install (on a raw, naked server) the necessary stack (set of services) necessary for a Data Scientist to work (or at least me !)
+All the IDE are cloud-based. This stack is :
 
 - Some basics Unix tool & helpers
 - Nginx
