@@ -20,3 +20,7 @@ echo 'export HISTSIZE=100000' >> ~/.bashrc
 echo 'export HISTFILESIZE=100000' >> ~/.bashrc
 echo 'shopt -s histappend' >> ~/.bashrc
 echo 'export HISTTIMEFORMAT="%Y-%m-%d %T "' >> ~/.bashrc
+
+
+echo "don't forget to uncomment your favorite aliases from ~/.bashrc !"
+
