@@ -17,7 +17,7 @@ elif [ "$os" = "debian" ]; then
 else
      exit 2
 fi
-filename="Anaconda3-2018.12-Linux-x86_64.sh" # Please change that 
+filename="Anaconda3-2020.11-Linux-x86_64.sh" # Please update that 
 wget -P $tempdir/ https://repo.anaconda.com/archive/$filename
 chmod +x $tempdir/$filename
 $tempdir/$filename -b -p $anaconda_location
@@ -33,8 +33,10 @@ node --version # Just checking # { (2017-10-03,) --> v6.11.3, (2019-02-25) --> v
 npm install -g configurable-http-proxy
 # Installing Jupyterhub
 /opt/anaconda3/bin/python3 -m pip install jupyterhub
-# BUGFIX for SQLAlchemy : /opt/anaconda3/bin/python -m pip install SQLAlchemy==1.4.11
 /opt/anaconda3/bin/python3 -m pip install --upgrade notebook
+
+# BUGFIX for SQLAlchemy : /opt/anaconda3/bin/python -m pip install SQLAlchemy==1.4.11
+# BUGFIX for ruamel : /opt/anaconda3/bin/conda install ruamel.yaml
 
 echo "------ Configuring permissions of Jupyterhub... ------" > /dev/null
 groupadd jupyterhub_users
