@@ -39,9 +39,6 @@ echo "------ Configuring permissions of Jupyterhub... ------" > /dev/null
 groupadd jupyterhub_users
 chown -R root:jupyterhub_users /opt/anaconda3
 
-echo "------ Setting right chmod for /root/* ... ------" > /dev/null
-chmod +x $ROOT/root/etc/init.d/* # On a "SystemV" OS
-
 echo "------ Copying Configuration files... ------" > /dev/null
 cp -R $ROOT/root/etc/jupyterhub /etc/
 cp -R $ROOT/root/etc/nginx /etc/
@@ -51,6 +48,7 @@ echo "------ Setting up Jupyterhub Service... ------" > /dev/null
 echo $service_system
 if [ "$service_system" == "SystemV" ]; then
      echo "Installing service in SystemV !"
+     chmod +x $ROOT/root/etc/init.d/* # Setting right chmod for /root/* ..
      cp $ROOT/root/etc/init.d/* /etc/init.d/ # Using "/*" and not "-R" because /etc/init.d is a symlink
      chkconfig --add jupyterhub 
 elif [ "$service_system" == "SystemD" ]; then
