@@ -26,13 +26,14 @@ rm $tempdir/$filename # To be clean (and the installer is big !)
 echo "------ Installing JupyterHub... ------" > /dev/null
 # Inspired from : https://gist.github.com/johnrc/604971f7d41ebf12370bf5729bf3e0a4
 # Dependencies
-curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
+curl --silent --location https://rpm.nodesource.com/setup_current.x | bash -
 yum install -y nodejs
-npm --version # Just checking # { (2017-10-03,2019-02-25) --> 3.10.10 }
-node --version # Just checking # { (2017-10-03,) --> v6.11.3, (2019-02-25) --> v6.16.0 }
+npm --version # Just checking # { (2017-10-03,2019-02-25) --> 3.10.10, (2021-04-28) --> 7.10.0 } 
+node --version # Just checking # { (2017-10-03,) --> v6.11.3, (2019-02-25) --> v6.16.0, (2021-04-28) --> v16.0.0}
 npm install -g configurable-http-proxy
 # Installing Jupyterhub
 /opt/anaconda3/bin/python3 -m pip install jupyterhub
+# BUGFIX for SQLAlchemy : /opt/anaconda3/bin/python -m pip install SQLAlchemy==1.4.11
 /opt/anaconda3/bin/python3 -m pip install --upgrade notebook
 
 echo "------ Configuring permissions of Jupyterhub... ------" > /dev/null
