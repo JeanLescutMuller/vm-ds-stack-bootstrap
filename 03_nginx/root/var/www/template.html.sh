@@ -42,7 +42,7 @@
       <div id = "header">
          <h1>$full_title</h1>
          <p>
-            Expedia / Analytics & Revenue Management / Data Science Team <br/>
+            EG / M&Y / Data-Science / Lodging Pricing Team <br/>
             Development server.
          </p>
          <p>
