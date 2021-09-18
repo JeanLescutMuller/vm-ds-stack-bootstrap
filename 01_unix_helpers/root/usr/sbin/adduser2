@@ -8,7 +8,7 @@ fi
 username="$1"
 
 echo "Adding user $username ..." > /dev/null
-adduser "$@" || exit 2
+adduser "$@" || exit 2  # $@ will resolve to all positional parameters. The equivalent of "*args" in Python.
 if passwd --status $username | grep --quiet 'locked'; then 
    passwd $username || exit 3
 fi
