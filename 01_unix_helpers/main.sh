@@ -6,14 +6,6 @@ echo "--------------------------" > /dev/null
 ROOT=$(dirname $0)
 
 
-echo "------ Installing base binaries ... ------" > /dev/null
-if [ "$os" == "centos" ]; then
-    yum update && yum install -y git vim tree telnet wget
-else
-    echo "ERROR : Could not install binaries for os='$os' !"
-    exit 1
-fi
-
 echo "------ Deploying Root directory ... ------" > /dev/null
 chmod +x $ROOT/root/usr/sbin/adduser2
 chmod +x $ROOT/root/usr/bin/configurebashrc

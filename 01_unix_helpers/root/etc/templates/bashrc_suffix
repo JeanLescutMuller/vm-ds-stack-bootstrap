@@ -1,0 +1,18 @@
+
+######################################################################################################################
+# This text originate from /usr/bin/bashrc_suffix_template
+# The text below either is already, or will be, added to ~/.bashrc for a user.
+# It has for purpose to activate some aliases & shell colors, and allow for a preciee, detailled and long Shell History
+
+export LS_OPTIONS='--color=auto'
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+export PS1="\[\033[03;{{PS_color}}m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]$ "
+
+# Improve logging of bash command :
+# Note : we append to .bashrc instead of .bash_profile (the regular way) because we want to activate this config even for non-login shells
+export HISTCONTROL=ignoredups:erasedups
+export HISTSIZE=100000
+export HISTFILESIZE=100000
+shopt -s histappend
+export HISTTIMEFORMAT="%Y-%m-%d %T "
