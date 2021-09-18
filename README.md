@@ -49,9 +49,9 @@ git clone https://github.com/JeanLescut/DataScience_stack_server.git
 cd ./DataScience_stack_server
 
 # Setting up .bashrc for users :
-chmod +x $ROOT/root/usr/sbin/adduser2
-chmod +x $ROOT/root/usr/bin/configurebashrc
-cp -R $ROOT/root/* /
+chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
+chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
+cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
 sudo -u $admin_user configurebashrc # non-root (main user)
 
