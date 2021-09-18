@@ -8,7 +8,7 @@ else
 fi
 
 sed "s/{{PS_color}}/$PS_color/g" /etc/templates/bashrc_suffix >> ~/.bashrc
-source ~/.bashrc
+# source ~/.bashrc # sourcing file inside a script will have NO effect. we have to source it from outside
 
 if [ ! -f ~/.profile ]; then
     cp /etc/templates/profile ~/.profile
