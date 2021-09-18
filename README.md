@@ -35,20 +35,29 @@ As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is
   
 GCP VertexAI VM :
 ```bash
+export admin_user='jupyter' # main user, with sudo privileges
 export os='debian'
 ```
 
 </td></tr></table>
 
 ```bash
+sudo su
 cd # go to home
 apt update && apt install -y git vim tree telnet wget # Installing base tools (Although only git is necessary at this stage)
 git clone https://github.com/JeanLescut/DataScience_stack_server.git
 cd ./DataScience_stack_server
 
-./01_unix_helpers/main.sh
-source ~/.bashrc
-sudo -u $admin_user configurebashrc
+# Setting up .bashrc for users :
+chmod +x $ROOT/root/usr/sbin/adduser2
+chmod +x $ROOT/root/usr/bin/configurebashrc
+cp -R $ROOT/root/* /
+configurebashrc # root
+sudo -u $admin_user configurebashrc # non-root (main user)
+
+# Make the JupyterLab Theme dark (to have a black Shell background in the Terminals)
+echo '{"theme": "JupyterLab Dark"}' > ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
+
 ```
 
 
