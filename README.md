@@ -53,11 +53,15 @@ chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
 chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
 cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
+source ~/.bashrc
 sudo -u $admin_user configurebashrc # non-root (main user)
 
 # Make the JupyterLab Theme dark (to have a black Shell background in the Terminals)
+# Or maybe just do that manually ?
+exit
+source ~/.bashrc
+mkdir -p  ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
 echo '{"theme": "JupyterLab Dark"}' > ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
-
 ```
 
 
