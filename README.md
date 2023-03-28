@@ -39,13 +39,19 @@ export admin_user='jupyter' # main user, with sudo privileges
 export os='debian'
 ```
 
+AWS EC2 perso :
+```bash
+export admin_user='enrices' # main user, with sudo privileges
+export os='debian'
+```
+
 </td></tr></table>
 
 ```bash
 sudo su
 cd # go to home
 apt update && apt install -y git vim tree telnet wget # Installing base tools (Although only git is necessary at this stage)
-git clone https://github.com/JeanLescut/DataScience_stack_server.git
+git clone https://github.com/JeanLescutMuller/DataScience_stack_server.git
 cd ./DataScience_stack_server
 
 # Setting up .bashrc for users :
@@ -55,7 +61,10 @@ cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
 source ~/.bashrc
 sudo -u $admin_user configurebashrc # non-root (main user)
+```
 
+Only on GCP Vertex AI :
+```bash
 # Make the JupyterLab Theme dark (to have a black Shell background in the Terminals)
 # Or maybe just do that manually ?
 exit
@@ -63,7 +72,6 @@ source ~/.bashrc
 mkdir -p  ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
 echo '{"theme": "JupyterLab Dark"}' > ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings
 ```
-
 
 ### Installing JupyterHub,etc... on a naked server (from a remote shell)
 
