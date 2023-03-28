@@ -13,6 +13,8 @@ if [ "$os" == "centos" ]; then
 elif [ "$os" == "rhel" ]; then
     cp $ROOT/root/etc/yum.repos.d/nginx.repo.rhel /etc/yum.repos.d/nginx.repo
     yum install -y nginx
+elif [ "$os" == "debian" ]; then
+    apt install -y nginx
 else
     echo "ERROR : Could not install Nginx on os='$os' !"
     exit 1
