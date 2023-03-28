@@ -13,11 +13,16 @@ All the IDE are cloud-based. This stack is :
 Even if it looks like `install.sh` can do all the work alone, I recommend to follow the scripts step by step.
 
 ## Compatibility :
-- Works on On-premise bareservers, VM & VPS
-- Works on AWS for EC2 or EMR clusters
-- Works on GCP Compute Engine VMs
+
+### Infrastructure :
+- Works on On-premise bareservers, VM & VPS (for `👨‍💻 Perso` server, for example)
+- Works on AWS for EC2 or EMR clusters (`🔶 AWS EC2` for example)
+- Works on GCP Compute Engine VMs (`🌀 GCP VertexAI VM` for example)
+
 Note: I used these scripts to configure my "Luke" Personal Server
 
+### OS :
+Any common Linux distro : `🔵 Debian`, `🟢 Ubuntu`, `🔴 CentOS`, `🟡 RHEL` ...
 
 ## License
 This script is Open-source, and I shared that freely under [Creative Common License](https://en.wikipedia.org/wiki/Creative_Commons_license) under "Attribution alone" terms. (code `BY`). Please click on the link if you're not familiar with these terms yet, in particular the clause of *Attribution*.
@@ -26,10 +31,94 @@ As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is
    - Any modification of the code **is allowed**
    - Any copy of distribution of the code **is allowed**
 
-
 ## Detailled usage :
 
+### 1. Connect to the VM
+- SSH (example `ssh -i ~/.ssh/jlescutmuller_rsa_passphrase.pem $admin_user@10.2.227.16`)
+- AWS EC2 Serial Console
+- ...
+
+### 2. Install basic binaries & Clone this project
+
+```bash
+sudo su
+cd # go to home
+```
+
+Installing base tools (Although only git is necessary at this stage)
+<table><tr><td>
+
+`🔵 Debian` `🟢 Ubuntu`
+```bash
+apt update && apt install -y git vim tree telnet wget
+```
+
+</td><td>
+
+`🔴 CentOS` `🟡 RHEL`
+```bash
+yum update && yum install -y git vim tree telnet wget
+```
+
+</td></tr></table>
+
+```bash
+git clone https://github.com/JeanLescutMuller/DataScience_stack_server.git
+cd ./DataScience_stack_server
+```
+
+### 3. Setting up .bashrc for users :
+
+<table><tr><td>
+
+`👨‍💻 Perso`
+```bash export admin_user='enrices'```
+
+</td><td>
+
+`🌀 GCP VertexAI VM` 
+```bash
+export admin_user='jupyter'
+```
+
+</td></tr><tr><td>
+
+`🔶🔴 AWS EC2 CentOS`
+```bash
+export admin_user='centos'
+```
+
+</td><td>
+
+`🔶🔶 AWS EMR`
+```bash
+export admin_user='hadoop'
+```
+
+</td></tr></table>
+
+```bash
+chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
+chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
+cp -R ./01_unix_helpers/root/* /
+configurebashrc # root
+source ~/.bashrc
+sudo -u $admin_user configurebashrc # non-root (main user)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 ### Setting up VM (from a local shell)
+
 
 <table><tr><td>
   
@@ -46,13 +135,6 @@ export os='debian'
 ```
 
 </td></tr></table>
-
-```bash
-sudo su
-cd # go to home
-apt update && apt install -y git vim tree telnet wget # Installing base tools (Although only git is necessary at this stage)
-git clone https://github.com/JeanLescutMuller/DataScience_stack_server.git
-cd ./DataScience_stack_server
 
 # Setting up .bashrc for users :
 chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
@@ -158,3 +240,6 @@ usermod -aG jupyterhub_users jlescutmuller
 # Installing R and RStudio :
 ./05_rstudio/main.sh
 ```
+
+
+Palet : 🔴🟠🟡🟢🔵🟣🟤⚫⚪
