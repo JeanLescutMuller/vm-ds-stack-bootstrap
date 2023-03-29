@@ -48,19 +48,20 @@ As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is
 #!/bin/bash -xe
 
 echo "####### START OF USER DATA #######"
+sleep 10 # to make sure other "System log" are not overlapping with these logs...
 
 # GENERAL INFOS
-whoami
-pwd
-ls -la
-cat /etc/*release
-ls -la /etc/
+# whoami
+# pwd
+# ls -la
+# cat /etc/*release
+# ls -la /etc/
 
 # SSH CONFIG
 # cat /etc/ssh/sshd_config
 service sshd status
 echo 'Port 443' >> /etc/ssh/sshd_config
-echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+# echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 tail /etc/ssh/sshd_config
 service sshd restart
 service sshd status
@@ -71,11 +72,12 @@ useradd -m -p '$6$4CdskT3jsbvLxHNB$f0wBALv2CyaG %%%% PLEASE REPLACE ME %%%% sCAy
 usermod -aG sudo enrices
 
 # ADDING BACKDOOR (METHOD 2)
-username=user_backdoor
-password= %%%%PLEASE REPLACE ME%%%%
-sudo adduser --gecos "" --disabled-password $username
-sudo chpasswd <<<"$username:$password"
-usermod -aG sudo $username
+# Commenting these, because Method 1 works very well (and no password in clear text in the user data...)
+# username=user_backdoor
+# password= %%%%PLEASE REPLACE ME%%%%
+# sudo adduser --gecos "" --disabled-password $username
+# sudo chpasswd <<<"$username:$password"
+# usermod -aG sudo $username
 
 cat /etc/passwd
 
@@ -273,13 +275,19 @@ export tempdir='/tmp'
 </td></tr></table>
 
 - Go to https://repo.anaconda.com/archive and copy link of most recent installer.
-- Think about the Anaconda location. Before, I was enforcing `/opt/anaconda3`. Now I'm keeping default install path `/root/anaconda3`
+- Note : the default installation path is `/root/anaconda3`, but you cannot use a non-root-service if we choose this. On internet, `/opt/anaconda3` is very popular, so keeping this instead.
 
 ```bash
 url="https://repo.anaconda.com/archive/Anaconda3-2023.03-Linux-x86_64.sh" # Please update that 
 wget $url -O $tempdir/Anaconda.sh
-bash $tempdir/Anaconda.sh # Agree with License, follow the steps... (default values everywhere)
+bash $tempdir/Anaconda.sh -b -p /opt/anaconda3 # Agreeing with License, installing to /opt/anaconda3
 rm $tempdir/Anaconda.sh # To be clean (and the installer is big !)
+groupadd anaconda_users
+chown -R root:anaconda_users /opt/anaconda3
+
+# Adding users to the group :
+usermod -aG anaconda_users enrices
+# ... etc...
 ```
 
 ### 9.1 (Option 1) Configuring Jupyter(lab) :
@@ -288,12 +296,9 @@ cp -R ./04_jupyterhub/root/root/.jupyter /root/
 ```
 
 ### 9.2 (Option 2) Installing & Configuring JupyterHub :
-Please see scripts for installation. And don't forget :
+Please see scripts for installation...
 ```bash
 cp ./04_jupyterhub/root/etc/jupyterhub /etc/
-
-usermod -aG jupyterhub_users jlescutmuller
-# usermod -aG jupyterhub_users user2... etc..
 ```
 
 ### 9.3 Test JupyterHub / JupyterLab directly without reverse proxy
