@@ -125,15 +125,16 @@ chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
 cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
 source ~/.bashrc
-sudo -u $admin_user configurebashrc # non-root (main user)
 ```
 
 Define admin user :
 ```bash
+# pick one :
 export admin_user='enrices' # 👨‍💻 Perso
 export admin_user='jupyter' # 🌀 GCP VertexAI VM
 export admin_user='centos' # 🔶🔴 AWS EC2 CentOS
 export admin_user='hadoop' # 🔶🔶 AWS EMR
+
 sudo -u $admin_user configurebashrc # non-root (main user)
 ```
 
@@ -218,7 +219,13 @@ listen [::]:80 default_server;
 include /etc/nginx/location.d/*.conf;
 ```
    
-3) `mkdir /etc/nginx/location.d`
+3) 
+   ```bash
+   mkdir /etc/nginx/location.d
+   nginx -t
+   service nginx restart
+   # check
+   ```
    
 </td></tr></table>
 
@@ -227,6 +234,7 @@ include /etc/nginx/location.d/*.conf;
 
 #### Generating Home Page :
 ```bash
+cp -R ./03_nginx/root/var/www /var/
 chmod +x /var/www/update_index.sh
 /var/www/update_index.sh
 ```
@@ -268,15 +276,15 @@ export tempdir='/tmp'
 - Think about the Anaconda location. Before, I was enforcing `/opt/anaconda3`. Now I'm keeping default install path `/root/anaconda3`
 
 ```bash
-filename="Anaconda3-2020.11-Linux-x86_64.sh" # Please update that 
-wget -P $tempdir/ https://repo.anaconda.com/archive/$filename
-bash $tempdir/$filename # Agree with License, follow the steps...
-rm $tempdir/$filename # To be clean (and the installer is big !)
+url="https://repo.anaconda.com/archive/Anaconda3-2023.03-Linux-x86_64.sh" # Please update that 
+wget $url -O $tempdir/Anaconda.sh
+bash $tempdir/Anaconda.sh # Agree with License, follow the steps... (default values everywhere)
+rm $tempdir/Anaconda.sh # To be clean (and the installer is big !)
 ```
 
 ### 9.1 (Option 1) Configuring Jupyter(lab) :
 ```bash
-cp ./04_jupyterhub/root/etc/jupyter /etc/
+cp -R ./04_jupyterhub/root/root/.jupyter /root/
 ```
 
 ### 9.2 (Option 2) Installing & Configuring JupyterHub :
@@ -293,8 +301,10 @@ For example, using port 80 :
 ```bash
 service nginx stop
 /root/anaconda3/bin/jupyter lab --port=80
-# Go to the webpage of the server (HTTP, TCP 80) and check
+# Go to the webpage of the server (HTTP, TCP 80) and check on /jupyter
+# For example http://18.138.212.239/jupyter
 ```
+Set up password (using token from terminal)
 
 ### 9.4 Setup Nginx reverse-proxy for JupyterHub / JupyterLab
 
@@ -302,7 +312,7 @@ service nginx stop
 
 1) Adding connection_upgrade variable :
 Source : https://jupyterhub.readthedocs.io/en/stable/reference/config-proxy.html
-**Before** `server {`, add :
+**Before** `server {`, add : (`:set paste` can help in vim)
 ```
 # Default server configuration
 # Top-level HTTP config for WebSocket headers
@@ -324,7 +334,7 @@ client_max_body_size 2M;
 
 #### add location.d :
 ```bash
-cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf .
+cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
 ``` 
 
 #### Testing :
@@ -339,8 +349,13 @@ service nginx status
 ```
 
 #### Adding logo link on home page :
+
+For example for Jupyterlab :
 ```bash
-cp -R ./04_jupyterhub/root/var /
+mkdir /var/www/html/html_links/
+cp ./04_jupyterhub/root/var/www/html/html_links/jupyter.html /var/www/html/html_links/
+mkdir /var/www/html/res/logos
+cp ./04_jupyterhub/root/var/www/html/res/logos/jupyter.png /var/www/html/res/logos/
 /var/www/update_index.sh
 ```
 
