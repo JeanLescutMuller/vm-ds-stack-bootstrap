@@ -61,6 +61,7 @@ elif [ "$service_system" == "SystemD" ]; then
 fi
 
 echo "------ Creating a label with Server's name in title + header of the page... ------" > /dev/null
+# Finding the path with : root # grep -Erin '{% block headercontainer %}' / 2>/dev/null
 html_file_path='./lib/python3.7/site-packages/notebook/templates/page.html'
 cp $html_file_path $html_file_path.backup
 sed -i 's/\(<title>\)/\1'$server_name':/' $html_file_path
