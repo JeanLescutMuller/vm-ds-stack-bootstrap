@@ -2,12 +2,15 @@
 
 # Color of user@hostname in the PS of the terminal
 if [ $(whoami) = "root" ]; then
-   PS_color=31 # "31" for red (root color)
+   user_color=31 # "31" for red (root color)
 else
-   PS_color=36 # By default : "36" for cyan.
+   user_color=36 # By default : "36" for cyan.
 fi
 
-sed "s/{{PS_color}}/$PS_color/g" /etc/templates/bashrc_suffix >> ~/.bashrc
+# Color of the hostname
+host_color=${host_color:-32}
+
+cat /etc/templates/bashrc_suffix | sed "s/{{user_color}}/$user_color/g" | sed "s/{{host_color}}/$host_color/g" >> ~/.bashrc
 # source ~/.bashrc # sourcing file inside a script will have NO effect. we have to source it from outside
 
 if [ ! -f ~/.profile ]; then

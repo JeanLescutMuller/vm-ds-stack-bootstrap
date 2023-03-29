@@ -130,9 +130,10 @@ source ~/.bashrc
 
 # For other users as well :
 sudo -u enrices configurebashrc # 👨‍💻 Perso
-# sudo -u jupyter configurebashrc # 🌀 GCP VertexAI VM
+sudo -u admin configurebashrc    # 🔶🔵 AWS EC2 Debian
 # sudo -u centos configurebashrc # 🔶🔴 AWS EC2 CentOS
 # sudo -u hadoop configurebashrc # 🔶🔶 AWS EMR
+# sudo -u jupyter configurebashrc # 🌀 GCP VertexAI VM
 ```
 
 
