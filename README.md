@@ -126,9 +126,11 @@ chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
 chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
 cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
+# host_color=31 configurebashrc # for PROD environment (make hostname RED)
 source ~/.bashrc
 
 # For other users as well :
+# add prefix host_color=31 for production environments
 sudo -u enrices configurebashrc # 👨‍💻 Perso
 sudo -u admin configurebashrc    # 🔶🔵 AWS EC2 Debian
 # sudo -u centos configurebashrc # 🔶🔴 AWS EC2 CentOS
