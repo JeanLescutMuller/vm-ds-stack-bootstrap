@@ -1,0 +1,10 @@
+[Unit]
+Description=Jupyterlab
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/root/anaconda3/bin/jupyter lab
+
+[Install]
+WantedBy=multi-user.target
