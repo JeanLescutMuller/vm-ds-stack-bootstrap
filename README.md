@@ -33,6 +33,55 @@ As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is
 
 ## Detailled usage :
 
+
+### 0. (Optional) Create VM
+
+#### AWS EC2
+
+- OS: `Debian`, for example
+- Instance type: one that supports Console, so `m6a.large`, for example
+- keypair : choose same keypair for the region
+- Allow HTTPS & HTTP traffic
+- Advanced details -> User data :
+
+```bash
+#!/bin/bash -xe
+
+echo "####### START OF USER DATA #######"
+
+# GENERAL INFOS
+whoami
+pwd
+ls -la
+cat /etc/*release
+ls -la /etc/
+
+# SSH CONFIG
+# cat /etc/ssh/sshd_config
+service sshd status
+echo 'Port 443' >> /etc/ssh/sshd_config
+echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+tail /etc/ssh/sshd_config
+service sshd restart
+service sshd status
+
+# ADDING ENRICES (METHOD 1)
+which useradd
+useradd -m -p '$6$4CdskT3jsbvLxHNB$f0wBALv2CyaG %%%% PLEASE REPLACE ME %%%% sCAyfVh3uul/' -s /bin/bash enrices
+usermod -aG sudo enrices
+
+# ADDING BACKDOOR (METHOD 2)
+username=user_backdoor
+password= %%%%PLEASE REPLACE ME%%%%
+sudo adduser --gecos "" --disabled-password $username
+sudo chpasswd <<<"$username:$password"
+usermod -aG sudo $username
+
+cat /etc/passwd
+
+echo "####### END OF USER DATA #######"
+```
+
 ### 1. Connect to the VM
 - SSH (example `ssh -i ~/.ssh/jlescutmuller_rsa_passphrase.pem $admin_user@10.2.227.16`)
 - AWS EC2 Serial Console
