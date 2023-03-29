@@ -1,10 +1,14 @@
 [Unit]
 Description=Jupyterlab
-After=network-online.target
+After=multi-user.target
 
 [Service]
-User=root
-ExecStart=/root/anaconda3/bin/jupyter lab
+ExecStart=/bin/bash -c '/opt/anaconda3/bin/jupyter lab -f /opt/anaconda3/etc/jupyter/jupyter_lab_config.py'
+WorkingDirectory=/home/enrices
+User=enrices
+Restart=always
+RestartSec=10s
+
 
 [Install]
 WantedBy=multi-user.target
