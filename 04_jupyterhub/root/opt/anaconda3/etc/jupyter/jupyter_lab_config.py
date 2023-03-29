@@ -29,4 +29,4 @@ c.ServerApp.iopub_data_rate_limit = 1000000 * 1000
 c.ServerApp.ip = '0.0.0.0'
 c.ServerApp.port = 8000 # Not sure if it's needed
 c.ServerApp.port_retries = 0
-c.ServerApp.root_dir = '/root/'
+c.ServerApp.root_dir = '/home/enrices'
