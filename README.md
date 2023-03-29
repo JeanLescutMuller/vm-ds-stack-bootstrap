@@ -120,25 +120,21 @@ cd ./DataScience_stack_server
 
 ### 3. Setting up .bashrc for users :
 
-For root :
 ```bash
+# For root :
 chmod +x ./01_unix_helpers/root/usr/sbin/adduser2
 chmod +x ./01_unix_helpers/root/usr/bin/configurebashrc
 cp -R ./01_unix_helpers/root/* /
 configurebashrc # root
 source ~/.bashrc
+
+# For other users as well :
+sudo -u enrices configurebashrc # 👨‍💻 Perso
+# sudo -u jupyter configurebashrc # 🌀 GCP VertexAI VM
+# sudo -u centos configurebashrc # 🔶🔴 AWS EC2 CentOS
+# sudo -u hadoop configurebashrc # 🔶🔶 AWS EMR
 ```
 
-Define admin user :
-```bash
-# pick one :
-export admin_user='enrices' # 👨‍💻 Perso
-export admin_user='jupyter' # 🌀 GCP VertexAI VM
-export admin_user='centos' # 🔶🔴 AWS EC2 CentOS
-export admin_user='hadoop' # 🔶🔶 AWS EMR
-
-sudo -u $admin_user configurebashrc # non-root (main user)
-```
 
 ### 4. (Optional) Dark theme for Jupyterlab in 🌀VertexAI :
 <details>
@@ -282,9 +278,11 @@ url="https://repo.anaconda.com/archive/Anaconda3-2023.03-Linux-x86_64.sh" # Plea
 wget $url -O $tempdir/Anaconda.sh
 bash $tempdir/Anaconda.sh -b -p /opt/anaconda3 # Agreeing with License, installing to /opt/anaconda3
 rm $tempdir/Anaconda.sh # To be clean (and the installer is big !)
+
+Group for permissions :
+```bash
 groupadd anaconda_users
 chown -R root:anaconda_users /opt/anaconda3
-
 # Adding users to the group :
 usermod -aG anaconda_users enrices
 # ... etc...
@@ -305,7 +303,7 @@ cp ./04_jupyterhub/root/etc/jupyterhub /etc/
 For example, using port 80 :
 ```bash
 service nginx stop
-/root/anaconda3/bin/jupyter lab --port=80
+/opt/anaconda3/bin/jupyter lab --port=80
 # Go to the webpage of the server (HTTP, TCP 80) and check on /jupyter
 # For example http://18.138.212.239/jupyter
 ```
@@ -319,7 +317,6 @@ Set up password (using token from terminal)
 Source : https://jupyterhub.readthedocs.io/en/stable/reference/config-proxy.html
 **Before** `server {`, add : (`:set paste` can help in vim)
 ```
-# Default server configuration
 # Top-level HTTP config for WebSocket headers
 # If Upgrade is defined, Connection = upgrade
 # If Upgrade is empty, Connection = close
@@ -344,11 +341,10 @@ cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
 
 #### Testing :
 ```bash
-# Quit Jupyter Lab "port 80" if it's still running
 nginx -t # to test configuration
 service nginx start
 service nginx status
-/root/anaconda3/bin/jupyter lab
+/opt/anaconda3/bin/jupyter lab
 # go on website and check.
 # go to /jupyter/ and check
 ```
