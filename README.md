@@ -193,8 +193,6 @@ yum install -y nginx
 # 🔵 Debian, 🟢 Ubuntu :
 apt install -y nginx
 
-
-service nginx start
 systemctl enable nginx
 service nginx status
 ```
@@ -223,9 +221,9 @@ include /etc/nginx/location.d/*.conf;
 3) 
    ```bash
    mkdir /etc/nginx/location.d
-   nginx -t
+   nginx -t # Check configuration file
    service nginx restart
-   # check
+   service nginx status
    ```
    
 </td></tr></table>
@@ -240,6 +238,8 @@ chmod +x /var/www/update_index.sh
 /var/www/update_index.sh
 ```
 If possible, go to [http://ip_of_the_vm:80] and check the page
+
+Tip: AWS Console will always redirect you to HTTP**S** . You need to manually remove this **S** 
 
 
 ### 8. Installing Anaconda
@@ -293,7 +293,7 @@ usermod -aG anaconda_users enrices
 
 ### 9.1 (Option 1) Configuring Jupyter(lab) :
 ```bash
-cp -R ./04_jupyterhub/root/root/.jupyter /root/
+cp ./04_jupyterhub/root/opt/anaconda3/etc/jupyter/jupyter_lab_config.py /opt/anaconda3/etc/jupyter/
 ```
 
 ### 9.2 (Option 2) Installing & Configuring JupyterHub :
@@ -306,10 +306,16 @@ cp ./04_jupyterhub/root/etc/jupyterhub /etc/
 For example, using port 80 :
 ```bash
 service nginx stop
-/opt/anaconda3/bin/jupyter lab --port=80
+
+# Then choose 1 :
+# /opt/anaconda3/bin/jupyter lab --port=80
+# /opt/anaconda3/bin/jupyter lab -f /opt/anaconda3/etc/jupyter/jupyter_lab_config.py --port=80
+
 # Go to the webpage of the server (HTTP, TCP 80) and check on /jupyter
 # For example http://18.138.212.239/jupyter
 ```
+
+⚠⚠⚠ **You need to do this step to configure jupyter lab password**
 Set up password (using token from terminal)
 
 ### 9.4 Setup Nginx reverse-proxy for JupyterHub / JupyterLab
@@ -332,9 +338,10 @@ map $http_upgrade $connection_upgrade {
 2) Bugfix (not sure if it's still needed...)
 **Inside** `server {`, add :
 ```
-# Bugfix: 'Request Entity too large' while saving in Jupyterhub
-# Source: https://www.cyberciti.biz/faq/linux-unix-bsd-nginx-413-request-entity-too-large/
-client_max_body_size 2M;
+        # Bugfix: 'Request Entity too large' while saving in Jupyterhub
+        # Source 1: https://www.cyberciti.biz/faq/linux-unix-bsd-nginx-413-request-entity-too-large/
+        # Source 2: https://github.com/jupyterlab/jupyterlab/issues/4214
+        client_max_body_size 100M;
 ``` 
 
 #### add location.d :
@@ -347,7 +354,11 @@ cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
 nginx -t # to test configuration
 service nginx start
 service nginx status
+
+# choose :
 /opt/anaconda3/bin/jupyter lab
+/opt/anaconda3/bin/jupyter lab -f /opt/anaconda3/etc/jupyter/jupyter_lab_config.py
+
 # go on website and check.
 # go to /jupyter/ and check
 ```
@@ -366,7 +377,8 @@ cp ./04_jupyterhub/root/var/www/html/res/logos/jupyter.png /var/www/html/res/log
 ### 9.5 Setting up Jupyterhub/JupyterLab service :
 
 #### Which service system is on the machine ? SystemV or SystemD ?
-We always prefer SystemD, if possible
+We always prefer SystemD, if possible.
+You can check if systemD is installed with :
 ```bash
 ls /etc/systemd
 ```
@@ -382,6 +394,16 @@ service $appname start
 service $appname status
 systemctl enable $appname.service # to start on boot
 ```
+
+# Bonus :
+
+```bash
+exit # go back to your non-privileged account
+git config --global user.name "Jean Lescut-Muller"
+git config --global user.email "jean.lescut@gmail.com"
+```
+
+
 
 
 Palet : 🔴🟠🟡🟢🔵🟣🟤⚫⚪
