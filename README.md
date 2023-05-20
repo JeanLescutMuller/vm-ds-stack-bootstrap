@@ -205,7 +205,7 @@ If possible, go to [http://ip_of_the_vm:80] and check the page
 `🔵 Debian 11`
 <table><tr><td>
    
-1) No need to touch `/etc/nginx/nginx.conf`
+1) No need to modify `/etc/nginx/nginx.conf`
 2) `vim /etc/nginx/sites-available/default` :
 
   a) If you want, you can duplicates those lines and replace 80 by 8080 to duplicate nginx ports
@@ -277,10 +277,11 @@ export tempdir='/tmp'
 - Note : the default installation path is `/root/anaconda3`, but you cannot use a non-root-service if we choose this. On internet, `/opt/anaconda3` is very popular, so keeping this instead.
 
 ```bash
-url="https://repo.anaconda.com/archive/Anaconda3-2023.03-Linux-x86_64.sh" # Please update that 
+url="https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh" # Please update that 
 wget $url -O $tempdir/Anaconda.sh
 bash $tempdir/Anaconda.sh -b -p /opt/anaconda3 # Agreeing with License, installing to /opt/anaconda3
 rm $tempdir/Anaconda.sh # To be clean (and the installer is big !)
+```
 
 Group for permissions :
 ```bash
