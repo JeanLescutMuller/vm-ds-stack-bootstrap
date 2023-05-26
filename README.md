@@ -398,13 +398,30 @@ systemctl enable $appname.service # to start on boot
 
 # Bonus :
 
+## Configure git :
+
 ```bash
 exit # go back to your non-privileged account
 git config --global user.name "Jean Lescut-Muller"
 git config --global user.email "jean.lescut@gmail.com"
 ```
 
+## Change color and Server-label Jupyterlab :
 
+```bash
+# Please adapt the path to 1) the user and 2) the desired theme (dark or light) to be altered
+path='/home/enrices/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
+color='#3c0056'
+#3c0056 Dark Purple
+#150056 Dark Blue
+#003c56 Dark Cyan
+#003f2c Dark Green
+server_name='Frankfurt-1'
+
+sed -i "/--jp-layout-color1:/c\  --jp-layout-color1: $color;" $path
+sed -i $'/:root/{e cat 04_jupyterhub/server_label.css\n}' $path
+sed -i "s/SERVER_NAME/$server_name/g" $path
+```
 
 
 Palet : 🔴🟠🟡🟢🔵🟣🟤⚫⚪
