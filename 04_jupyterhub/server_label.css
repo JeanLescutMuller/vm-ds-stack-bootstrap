@@ -1,0 +1,10 @@
+div#jp-top-panel::after {
+    content: "SERVER_NAME";
+    color: white;
+    margin-left: auto;
+    margin-top: 2px;
+    margin-right: 20px;
+    font-size: larger;
+    font-weight: bolder;
+}
+
