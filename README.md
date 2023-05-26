@@ -410,12 +410,15 @@ git config --global user.email "jean.lescut@gmail.com"
 
 ```bash
 # Please adapt the path to 1) the user and 2) the desired theme (dark or light) to be altered
+# Choose 1 :
 path='/home/enrices/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
+path='/opt/anaconda3/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
+
 color='#3c0056'
-#3c0056 Dark Purple
-#150056 Dark Blue
-#003c56 Dark Cyan
-#003f2c Dark Green
+#3c0056 Dark Purple # Frankfurt-1
+#150056 Dark Blue   # Frankfurt-2
+#003c56 Dark Cyan   # Frankfurt-3
+#003f2c Dark Green  # Frankfurt-4
 server_name='Frankfurt-1'
 
 sed -i "/--jp-layout-color1:/c\  --jp-layout-color1: $color;" $path
