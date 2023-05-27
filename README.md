@@ -414,16 +414,28 @@ git config --global user.email "jean.lescut@gmail.com"
 path='/home/enrices/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
 path='/opt/anaconda3/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
 
-color='#3c0056'
-#3c0056 Dark Purple # Frankfurt-1
-#150056 Dark Blue   # Frankfurt-2
-#003c56 Dark Cyan   # Frankfurt-3
-#003f2c Dark Green  # Frankfurt-4
-server_name='Frankfurt-1'
+# server_name='Frankfurt-1'
+# color_text='#b8b8ff'  # Light Purple
+# color_border='#7b3dd2' # Purple
 
-sed -i "/--jp-layout-color1:/c\  --jp-layout-color1: $color;" $path
+server_name='Frankfurt-2'
+color_text='#7e9dff'   # Light Blue
+color_border='#3151b8' # Blue
+
+# server_name='Frankfurt-3'
+# color_text='#23d9e6' # Flashy Cyan
+# color_border='#3eafb7' # Paste Cyan
+
+# server_name='Frankfurt-4'
+# color_text='#33e232' # Flashy Green
+# color_border='#3fb73e' # Pastel Green
+
+sed -i "/--jp-layout-color3:/c\  --jp-layout-color3: $color_border;" $path
 sed -i $'/:root/{e cat 04_jupyterhub/server_label.css\n}' $path
-sed -i "s/SERVER_NAME/$server_name/g" $path
+
+# Or just VIM at this point...
+# sed -i "/--jp-layout-color3:/c\  --jp-layout-color1: $color;" $path
+# sed -i "s/SERVER_NAME/$server_name/g" $path
 ```
 
 
