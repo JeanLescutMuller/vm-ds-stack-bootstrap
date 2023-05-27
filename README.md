@@ -218,6 +218,12 @@ listen [::]:80 default_server;
 include /etc/nginx/location.d/*.conf;
 ```
    
+2b) Or automatic way :
+   ```bash
+   sed -i $'/# Default server configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon1.conf\n}' /etc/nginx/sites-available/default
+   sed -i $'/# SSL configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon2.conf\n}' /etc/nginx/sites-available/default
+   ```
+   
 3) 
    ```bash
    mkdir /etc/nginx/location.d
@@ -402,8 +408,16 @@ systemctl enable $appname.service # to start on boot
 
 ```bash
 exit # go back to your non-privileged account
+
+# Configure GIT :
+git config --global pull.rebase false
 git config --global user.name "Jean Lescut-Muller"
 git config --global user.email "jean.lescut@gmail.com"
+
+# Install Jupyterlab GIT Extension
+sudo /opt/anaconda3/bin/pip install --upgrade jupyterlab jupyterlab-git
+chown -R root:anaconda_users /opt/anaconda3/
+sudo reboot
 ```
 
 ## Change color and Server-label Jupyterlab :
