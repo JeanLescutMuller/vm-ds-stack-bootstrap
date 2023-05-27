@@ -1,6 +1,6 @@
 div#jp-top-panel::after {
-    content: "Server-Name"; /*CUSTOM*/
-    color: white; /*CUSTOM*/
+    content: "Server-Name"; /*CUSTOM LABEL*/
+    color: white; /*CUSTOM COLOR*/
     margin-left: 25px;
     font-size: 1.5em;
     font-weight: bolder;
