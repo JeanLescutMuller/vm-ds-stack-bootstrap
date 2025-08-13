@@ -47,41 +47,63 @@ As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is
 ```bash
 #!/bin/bash -xe
 
-echo "####### START OF USER DATA #######"
-sleep 10 # to make sure other "System log" are not overlapping with these logs...
+echo "############## START OF USER DATA ##############"
 
+# -------------------------------------------
 # GENERAL INFOS
-# whoami
-# pwd
-# ls -la
-# cat /etc/*release
-# ls -la /etc/
+# -------------------------------------------
+# whoami
+# pwd
+# ls -la
+# cat /etc/*release
+# ls -la /etc/
 
+# -------------------------------------------
 # SSH CONFIG
+# -------------------------------------------
 # cat /etc/ssh/sshd_config
-service sshd status
-echo 'Port 443' >> /etc/ssh/sshd_config
-# echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
-tail /etc/ssh/sshd_config
+
+SSHD_CONF="/etc/ssh/sshd_config"
+
+# If a line with PasswordAuthentication exists (even commented), replace it
+if grep -q -E '^\s*#?\s*PasswordAuthentication\s+' "$SSHD_CONF"; then
+    echo "Changing the PasswordAuthentication line to yes (And potentially uncommenting it)"
+    sudo sed -i -E 's|^\s*#?\s*PasswordAuthentication\s+.*|PasswordAuthentication yes|' "$SSHD_CONF"
+else
+    echo "Appending PasswordAuthentication yes to $SSHD_CONF"
+    echo "PasswordAuthentication yes" | sudo tee -a "$SSHD_CONF" > /dev/null
+fi
+
+# Ensure Port 443 is set
+if grep -q -E '^\s*#?\s*Port\s+' "$SSHD_CONF"; then
+    echo "Changing Port to 443"
+    sudo sed -i -E 's|^\s*#?\s*Port\s+.*|Port 443|' "$SSHD_CONF"
+else
+    echo "Appending Port 443 at the end of $SSHD_CONF"
+    echo "Port 443" | sudo tee -a "$SSHD_CONF" > /dev/null
+fi
+
 service sshd restart
 service sshd status
 
+# -------------------------------------------
 # ADDING ENRICES (METHOD 1)
+# -------------------------------------------
 which useradd
-useradd -m -p '$6$4CdskT3jsbvLxHNB$f0wBALv2CyaG %%%% PLEASE REPLACE ME %%%% sCAyfVh3uul/' -s /bin/bash enrices
+useradd -m -p '{PLEASE REPLACE ME}' -s /bin/bash enrices
 usermod -aG sudo enrices
 
 # ADDING BACKDOOR (METHOD 2)
-# Commenting these, because Method 1 works very well (and no password in clear text in the user data...)
-# username=user_backdoor
-# password= %%%%PLEASE REPLACE ME%%%%
-# sudo adduser --gecos "" --disabled-password $username
-# sudo chpasswd <<<"$username:$password"
-# usermod -aG sudo $username
+# Commenting these, because Method 1 works very well (and no password in clear text in the user data...)
+# username=user_backdoor
+# password= # Please write clear-text password here
+# sudo adduser --gecos "" --disabled-password $username
+# sudo chpasswd <<<"$username:$password"
+# usermod -aG sudo $username
 
 cat /etc/passwd
 
-echo "####### END OF USER DATA #######"
+echo "############## END OF USER DATA ##############"
 ```
 
 ### 1. Connect to the VM
@@ -137,7 +159,11 @@ sudo -u admin configurebashrc    # 🔶🔵 AWS EC2 Debian
 # sudo -u hadoop configurebashrc # 🔶🔶 AWS EMR
 # sudo -u jupyter configurebashrc # 🌀 GCP VertexAI VM
 ```
-
+Then you can also change the hostname :
+```
+hostnamectl set-hostname frankfurt-1 # Change this to match name in EC2 interface
+vim /etc/cloud/cloud.cfg # I am NOT sure it is useful to make it persistent at reboot, but you could change `preserve_hostname: false` to `preserve_hostname: true`
+```
 
 ### 4. (Optional) Dark theme for Jupyterlab in 🌀VertexAI :
 <details>
@@ -213,16 +239,11 @@ If possible, go to [http://ip_of_the_vm:80] and check the page
 listen 80 default_server;
 listen [::]:80 default_server;
 ```
-  b) add the location folder :
-```
-include /etc/nginx/location.d/*.conf;
-```
-   
-2b) Or automatic way :
-   ```bash
-   sed -i $'/# Default server configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon1.conf\n}' /etc/nginx/sites-available/default
-   sed -i $'/# SSL configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon2.conf\n}' /etc/nginx/sites-available/default
-   ```
+  b) Make the Websockets work (2025-08: This is necessary for Jupyter... and redundant with below)
+Look at the output of `sed $'/# Default server configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon1.conf\n}' /etc/nginx/sites-available/default` and compare it with `/etc/nginx/sites-available/default` for validation. Then you can add a `-i` after sed to modify the file in-place.
+
+c) Include `/etc/nginx/location.d/*.conf` so I can add Jupyter config, etc... separately.
+Look at the output of `sed $'/# SSL configuration/{e cat 03_nginx/root/etc/nginx/sites-available/default.addon2.conf\n}' /etc/nginx/sites-available/default` and compare it with `/etc/nginx/sites-available/default` for validation. Then you can add a `-i` after sed to modify the file in-place.
    
 3) 
    ```bash
@@ -283,7 +304,7 @@ export tempdir='/tmp'
 - Note : the default installation path is `/root/anaconda3`, but you cannot use a non-root-service if we choose this. On internet, `/opt/anaconda3` is very popular, so keeping this instead.
 
 ```bash
-url="https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh" # Please update that 
+url="https://repo.anaconda.com/archive/Anaconda3-2025.06-1-Linux-x86_64.sh" # Please update that 
 wget $url -O $tempdir/Anaconda.sh
 bash $tempdir/Anaconda.sh -b -p /opt/anaconda3 # Agreeing with License, installing to /opt/anaconda3
 rm $tempdir/Anaconda.sh # To be clean (and the installer is big !)
@@ -314,12 +335,11 @@ For example, using port 80 :
 ```bash
 service nginx stop
 
-# Then choose 1 :
-# /opt/anaconda3/bin/jupyter lab --port=80
-# /opt/anaconda3/bin/jupyter lab -f /opt/anaconda3/etc/jupyter/jupyter_lab_config.py --port=80
+# Then :
+/opt/anaconda3/bin/jupyter lab --config=/opt/anaconda3/etc/jupyter/jupyter_lab_config.py --no-browser --port=80
 
-# Go to the webpage of the server (HTTP, TCP 80) and check on /jupyter
-# For example http://18.138.212.239/jupyter
+# Go to the webpage of the server (HTTP, TCP 80) and check on /jupyter/
+# For example http://18.138.212.239/jupyter/ (just check if jupyter receive some packets.)
 ```
 
 ⚠⚠⚠ **You need to do this step to configure jupyter lab password**
@@ -356,18 +376,17 @@ map $http_upgrade $connection_upgrade {
 cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
 ``` 
 
-#### Testing :
+#### Testing and Setting up Jupyter password :
 ```bash
 nginx -t # to test configuration
 service nginx start
 service nginx status
 
-# choose :
-/opt/anaconda3/bin/jupyter lab
-/opt/anaconda3/bin/jupyter lab -f /opt/anaconda3/etc/jupyter/jupyter_lab_config.py
-
-# go on website and check.
-# go to /jupyter/ and check
+# Testing Jupyterlab :
+/opt/anaconda3/bin/jupyter lab --config=/opt/anaconda3/etc/jupyter/jupyter_lab_config.py --no-browser
+# 1) Make note of the token that appears in the logs (after "Or copy and paste one of these URLs...")
+# 2) go to {ip}/jupyter/ and check if jupyter receive some packets.
+# 3) Paste the token and stup your password
 ```
 
 #### Adding logo link on home page :
@@ -416,7 +435,7 @@ git config --global user.email "jean.lescut@gmail.com"
 
 # Install Jupyterlab GIT Extension
 sudo /opt/anaconda3/bin/pip install --upgrade jupyterlab jupyterlab-git
-chown -R root:anaconda_users /opt/anaconda3/
+sudo chown -R root:anaconda_users /opt/anaconda3/ # 2025-08: I am assuming owner group changed for some folders. This command normally takes a bit of time.
 sudo reboot
 ```
 
@@ -427,14 +446,15 @@ sudo reboot
 # Choose 1 :
 path='/home/enrices/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
 path='/opt/anaconda3/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
+# 2025-08 : I dont understand "Choose 1". Anyways only the second file exist in my case, so I'll choose this one.
 
 # server_name='Frankfurt-1'
 # color_text='#b8b8ff'  # Light Purple
 # color_border='#7b3dd2' # Purple
 
-server_name='Frankfurt-2'
-color_text='#7e9dff'   # Light Blue
-color_border='#3151b8' # Blue
+# server_name='Frankfurt-2'
+# color_text='#7e9dff'   # Light Blue
+# color_border='#3151b8' # Blue
 
 # server_name='Frankfurt-3'
 # color_text='#23d9e6' # Flashy Cyan
@@ -444,12 +464,11 @@ color_border='#3151b8' # Blue
 # color_text='#33e232' # Flashy Green
 # color_border='#3fb73e' # Pastel Green
 
-sed -i "/--jp-layout-color3:/c\  --jp-layout-color3: $color_border;" $path
-sed -i $'/:root/{e cat 04_jupyterhub/server_label.css\n}' $path
-
-# Or just VIM at this point...
-# sed -i "/--jp-layout-color3:/c\  --jp-layout-color1: $color;" $path
-# sed -i "s/SERVER_NAME/$server_name/g" $path
+cp $path "$path.backup" # Making a backup
+sed -i "/--jp-layout-color3:/c\  --jp-layout-color3: $color_border;" $path # Replacing "layout-color3" by our value "$color_border"
+export server_name color_text # Exporting variables so we can use envsubst below (into a temp file)
+envsubst < 04_jupyterhub/server_label.css.template > $tempdir/server_label.css
+sed -i $'/:root/{e cat $tempdir/server_label.css\n}' $path # Adding the content of the temp file in the css
 ```
 
 
