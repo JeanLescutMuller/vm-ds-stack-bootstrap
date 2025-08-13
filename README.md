@@ -27,9 +27,9 @@ Any common Linux distro : `🔵 Debian`, `🟢 Ubuntu`, `🔴 CentOS`, `🟡 RHE
 ## License
 This script is Open-source, and I shared that freely under [Creative Common License](https://en.wikipedia.org/wiki/Creative_Commons_license) under "Attribution alone" terms. (code `BY`). Please click on the link if you're not familiar with these terms yet, in particular the clause of *Attribution*.
 As long as the source (this repo) and the author (myself, Jean Lescut-Muller) is clearly displayed 
-   - Any usage of these scripts, professional or not, for Commercial use or not **is allowed**
-   - Any modification of the code **is allowed**
-   - Any copy of distribution of the code **is allowed**
+   - Any usage of these scripts, professional or not (for Commercial use or not) is: **allowed**
+   - Any modification of the code is: **allowed**
+   - Any copy of distribution of the code is: **allowed**
 
 ## Detailled usage :
 
