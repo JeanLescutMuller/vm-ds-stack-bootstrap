@@ -184,7 +184,7 @@ usermod -aG anaconda_users enrices
 
 ### 9. Configuring Jupyterlab :
 ```bash
-cp ./04_jupyterhub/root/opt/anaconda3/etc/jupyter/jupyter_lab_config.py /opt/anaconda3/etc/jupyter/
+cp ./04_jupyter/root/opt/anaconda3/etc/jupyter/jupyter_lab_config.py /opt/anaconda3/etc/jupyter/
 ```
 
 ### 9.3 Test JupyterLab directly (without reverse proxy)
@@ -227,7 +227,7 @@ map $http_upgrade $connection_upgrade {
 
 #### add location.d :
 ```bash
-cp ./04_jupyterhub/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
+cp ./04_jupyter/root/etc/nginx/location.d/jupyter.conf /etc/nginx/location.d/
 ```
 
 #### Testing and Setting up Jupyter password :
@@ -247,9 +247,9 @@ service nginx status
 
 ```bash
 mkdir /var/www/html/html_links/
-cp ./04_jupyterhub/root/var/www/html/html_links/jupyter.html /var/www/html/html_links/
+cp ./04_jupyter/root/var/www/html/html_links/jupyter.html /var/www/html/html_links/
 mkdir /var/www/html/res/logos
-cp ./04_jupyterhub/root/var/www/html/res/logos/jupyter.png /var/www/html/res/logos/
+cp ./04_jupyter/root/var/www/html/res/logos/jupyter.png /var/www/html/res/logos/
 /var/www/update_index.sh
 ```
 
@@ -257,7 +257,7 @@ cp ./04_jupyterhub/root/var/www/html/res/logos/jupyter.png /var/www/html/res/log
 
 ```bash
 appname="jupyterlab"
-cp ./04_jupyterhub/root/etc/systemd/system/$appname.service /etc/systemd/system/
+cp ./04_jupyter/root/etc/systemd/system/$appname.service /etc/systemd/system/
 service $appname start
 service $appname status
 systemctl enable $appname.service # to start on boot
@@ -286,7 +286,7 @@ sudo reboot
 ## Change color and Server-label Jupyterlab :
 
 ```bash
-path='/home/enrices/.local/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
+path='/opt/anaconda3/share/jupyter/lab/themes/@jupyterlab/theme-dark-extension/index.css'
 server_name='Frankfurt-1'
 color_text='#b8b8ff'  # Light Purple
 color_border='#7b3dd2' # Purple
@@ -294,7 +294,7 @@ color_border='#7b3dd2' # Purple
 cp $path "$path.backup" # Making a backup
 sed -i "/--jp-layout-color3:/c\  --jp-layout-color3: $color_border;" $path # Replacing "layout-color3" by our value "$color_border"
 export server_name color_text # Exporting variables so we can use envsubst below (into a temp file)
-envsubst < 04_jupyterhub/server_label.css.template > $tempdir/server_label.css
+envsubst < 04_jupyter/server_label.css.template > $tempdir/server_label.css
 sed -i $'/:root/{e cat $tempdir/server_label.css\n}' $path # Adding the content of the temp file in the css
 ```
 
